@@ -1,11 +1,21 @@
+# render.yaml
 services:
   - type: web
     name: python.ingr.in
     runtime: python
-    repo: https://github.com/ingr-in/python.ingr.in
-    branch: main
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0
+      - key: FLASK_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: my-database
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          name: my-redis
+          type: redis
+          property: connectionString
