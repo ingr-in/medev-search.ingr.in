@@ -1,7 +1,9 @@
 services:
   - type: web
-    name: python-hello-world
+    name: python.ingr.in
     runtime: python
+    repo: https://github.com/ingr-in/python.ingr.in
+    branch: main
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app
     envVars:
