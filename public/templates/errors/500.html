@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}500 - Server Error{% endblock %}
+
+{% block content %}
+<div class="error-container">
+    <div class="error-code">500</div>
+    <div class="error-message">Internal Server Error</div>
+    <div class="error-description">
+        Something went wrong on our end. Please try again later.
+    </div>
+    <div class="error-actions">
+        <a href="{{ url_for('home') }}" class="btn btn-primary">Go Home</a>
+        <button onclick="location.reload()" class="btn btn-secondary">Try Again</button>
+    </div>
+</div>
+{% endblock %}
