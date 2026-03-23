@@ -1,7 +1,7 @@
 import os
 from flask import Flask
-from routes.main import main
-from routes.api import api
+from man.main import main
+from man.api import api
 
 app = Flask(__name__)
 
