@@ -1,20 +1,9 @@
-# routes/api.py
-from flask import Blueprint, request, jsonify
-import requests
+from flask import Blueprint, jsonify
+from services.api_service import get_data
 
-api_bp = Blueprint('api', __name__)
+api_routes = Blueprint("api", __name__)
 
-@api_bp.route('/data', methods=['GET'])
-def get_data():
-    """Example API endpoint"""
-    return jsonify({
-        'data': 'Your data here',
-        'method': 'GET'
-    })
-
-@api_bp.route('/data', methods=['POST'])
-def post_data():
-    """Example POST endpoint"""
-    data = request.get_json()
-    # Process data
-    return jsonify({'received': data, 'status': 'success'}), 201
+@api_routes.route("/data")
+def data():
+    result = get_data()
+    return jsonify(result)
