@@ -3,8 +3,8 @@ from flask import Flask
 from config import Config
 from routes.main import main_bp
 from routes.api import api_bp
-from services.database import init_db
-from services.external_api import ExternalAPIService
+#from services.database import init_db
+#from services.external_api import ExternalAPIService
 
 # Create Flask app
 app = Flask(__name__)
