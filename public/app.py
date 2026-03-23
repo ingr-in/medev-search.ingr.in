@@ -1,3 +1,4 @@
+import os
 from flask import Flask
 from routes.main import main_routes
 from routes.api import api_routes
