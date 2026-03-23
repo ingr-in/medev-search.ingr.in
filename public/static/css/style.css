@@ -1,0 +1,110 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Body Gradient Background */
+body {
+    height: 100vh;
+    background: linear-gradient(
+        to right,
+        purple,
+        whitesmoke,
+        deeppink,
+        greenyellow,
+        hotpink,
+        springgreen
+    );
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Main Container */
+.container {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(15px);
+    padding: 40px;
+    border-radius: 20px;
+    width: 400px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+
+/* Title */
+h1 {
+    color: #222;
+    margin-bottom: 20px;
+}
+
+/* Input Field */
+input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    margin-bottom: 15px;
+    outline: none;
+    font-size: 16px;
+}
+
+/* Button */
+button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(
+        to right,
+        deeppink,
+        purple,
+        hotpink
+    );
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* Button Hover */
+button:hover {
+    transform: scale(1.05);
+    background: linear-gradient(
+        to right,
+        springgreen,
+        greenyellow,
+        purple
+    );
+}
+
+/* Result Box */
+.result {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.3);
+    height: 200px;
+    overflow-y: auto;
+    text-align: left;
+    font-size: 14px;
+}
+
+/* Scrollbar Styling */
+.result::-webkit-scrollbar {
+    width: 6px;
+}
+
+.result::-webkit-scrollbar-thumb {
+    background: purple;
+    border-radius: 10px;
+}
+
+/* Footer */
+.footer {
+    margin-top: 15px;
+    font-size: 12px;
+    color: #333;
+  }
