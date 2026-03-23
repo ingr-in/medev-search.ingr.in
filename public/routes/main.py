@@ -4,7 +4,7 @@ from flask import Blueprint, render_template, jsonify
 main = Blueprint('main', __name__)
 
 @main.route('/debug')
-def home():
+def debug():
     return {
         'message': 'Hello, World!',
         'status': 'running',
@@ -12,9 +12,9 @@ def home():
     }
 
 @main.route('/')
-def html_page():
+def home():
     return render_template('index.html')
 
 @main.route('/about)
-    def html_page():
+    def about():
         return render_template('about.html')
