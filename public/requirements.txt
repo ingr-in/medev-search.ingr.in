@@ -6,4 +6,3 @@ psycopg2-binary
 sqlalchemy
 redis
 config
-init_db
