@@ -17,6 +17,10 @@ init_db(app)
 app.register_blueprint(main_bp)
 app.register_blueprint(api_bp, url_prefix='/api')
 
+@app.route('/')
+def home():
+    return render_template('index.html')
+    
 # Health check
 @app.route('/health')
 def health():
@@ -29,9 +33,5 @@ def external_data():
     data = external_service.get_data()
     return data
 
-@app.route('/')
-def home():
-    return render_template('index.html')
-    
 if __name__ == '__main__':
     app.run(host='https://python.ingr.in/')
