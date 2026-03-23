@@ -29,5 +29,9 @@ def external_data():
     data = external_service.get_data()
     return data
 
+@app.route('/')
+def home():
+    return render_template('index.html')
+    
 if __name__ == '__main__':
     app.run(host='https://python.ingr.in/')
