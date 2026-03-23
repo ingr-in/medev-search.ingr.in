@@ -10,12 +10,5 @@ services:
         value: 3.11.0
       - key: FLASK_ENV
         value: production
-      - key: DATABASE_URL
-        fromDatabase:
-          name: my-database
-          property: connectionString
-      - key: REDIS_URL
-        fromService:
-          name: my-redis
-          type: redis
-          property: connectionString
+      - key: App_Icon
+       value: https://chitram.ingr.in/favicon_io/logov2.png
