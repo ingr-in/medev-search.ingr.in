@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Maintenance - Under Construction{% endblock %}
+
+{% block content %}
+<div class="error-container">
+    <div class="error-code">
+        <i class="fas fa-tools"></i>
+    </div>
+    <div class="error-message">Under Maintenance</div>
+    <div class="error-description">
+        We're currently performing scheduled maintenance. 
+        <br>We'll be back shortly!
+    </div>
+    <div class="progress-bar">
+        <div class="progress"></div>
+    </div>
+    <div class="error-actions">
+        <a href="{{ url_for('home') }}" class="btn btn-primary">Check Status</a>
+    </div>
+</div>
+
+<style>
+.progress-bar {
+    width: 300px;
+    height: 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    margin: 2rem auto;
+    overflow: hidden;
+}
+
+.progress {
+    width: 60%;
+    height: 100%;
+    background-color: #007bff;
+    border-radius: 5px;
+    animation: loading 2s infinite;
+}
+
+@keyframes loading {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(200%); }
+}
+</style>
+{% endblock %}
