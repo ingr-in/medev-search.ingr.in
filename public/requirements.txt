@@ -1,7 +1,8 @@
-Flask==2.3.3
-gunicorn==21.2.0
-python-dotenv==1.0.0
-requests==2.31.0
-psycopg2-binary==2.9.9  # For PostgreSQL (if using)
-sqlalchemy==2.0.22      # ORM (optional)
-redis==5.0.1            # For caching (optional)
+Flask
+gunicorn
+python-dotenv
+requests
+psycopg2-binary 
+sqlalchemy
+redis
+config
