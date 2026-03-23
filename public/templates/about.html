@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>About Us</title>
+</head>
+
+<body style="
+    margin:0;
+    padding:0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, purple, whitesmoke, deeppink, greenyellow, hotpink, springgreen);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+">
+
+<div style="
+    width:700px;
+    padding:40px;
+    text-align:center;
+    background: rgba(255,255,255,0.2);
+    border-radius:20px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+">
+
+    <h1 style="margin-bottom:20px;">About Our Crawler 🚀</h1>
+
+    <p id="about-text" style="font-size:16px; margin-bottom:20px;">
+        This project is a powerful web crawler that extracts website data and converts it into JSON format.
+    </p>
+
+    <button onclick="changeText()" style="
+        padding:10px 20px;
+        border:none;
+        border-radius:10px;
+        background: linear-gradient(to right, purple, deeppink);
+        color:white;
+        cursor:pointer;
+        margin-bottom:20px;
+    ">
+        Learn More
+    </button>
+
+    <!-- Features Card -->
+    <div style="
+        background: rgba(255,255,255,0.3);
+        margin-top:20px;
+        padding:20px;
+        border-radius:15px;
+    ">
+        <h2>Features</h2>
+        <ul style="list-style:none; padding:0;">
+            <li>⚡ Fast crawling</li>
+            <li>📦 JSON output</li>
+            <li>⚛️ React frontend</li>
+            <li>🕷️ Scrapy backend</li>
+        </ul>
+    </div>
+
+    <!-- Mission Card -->
+    <div style="
+        background: rgba(255,255,255,0.3);
+        margin-top:20px;
+        padding:20px;
+        border-radius:15px;
+    ">
+        <h2>Our Mission</h2>
+        <p>
+            To make web data extraction simple, fast and powerful for developers.
+        </p>
+    </div>
+
+    <div style="margin-top:20px; font-size:12px;">
+        © 2026 Web Crawler Project
+    </div>
+
+</div>
+
+<script>
+function changeText() {
+    document.getElementById("about-text").innerText =
+        "Our crawler uses advanced Scrapy technology to crawl multiple pages and provide structured JSON data efficiently.";
+}
+</script>
+
+</body>
+</html>
