@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}429 - Too Many Requests{% endblock %}
+
+{% block content %}
+<div class="error-container">
+    <div class="error-code">429</div>
+    <div class="error-message">Too Many Requests</div>
+    <div class="error-description">
+        You've made too many requests. Please wait a moment and try again.
+    </div>
+    <div class="error-actions">
+        <a href="{{ url_for('home') }}" class="btn btn-primary">Go Home</a>
+        <div class="countdown">Redirecting in <span id="countdown">5</span> seconds...</div>
+    </div>
+</div>
+
+<script>
+    let seconds = 5;
+    const countdownElement = document.getElementById('countdown');
+    const timer = setInterval(() => {
+        seconds--;
+        countdownElement.textContent = seconds;
+        if (seconds <= 0) {
+            clearInterval(timer);
+            window.location.href = "{{ url_for('home') }}";
+        }
+    }, 1000);
+</script>
+{% endblock %}
