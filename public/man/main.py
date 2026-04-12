@@ -20,4 +20,4 @@ def about():
 
 @main.route('/bots')
 def about();
-    return render_template('bots.py)
+    return render_template('bots.py')
