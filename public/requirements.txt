@@ -7,3 +7,7 @@ sqlalchemy
 redis
 config
 flask-sqlalchemy
+beautifulsoup4
+tldextract
+schedule
+stem
