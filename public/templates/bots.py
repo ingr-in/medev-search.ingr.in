@@ -10,7 +10,7 @@ from threading import Thread
 from flask import Flask, request, jsonify
 
 # 🔧 CONFIG
-BASE_DOMAIN = "domain.com"
+BASE_DOMAIN = "ingr.in"
 MAX_THREADS = 5
 MAX_URLS = 50
 TOR_PROXY = "socks5h://127.0.0.1:9050"
@@ -42,8 +42,8 @@ def fetch(url):
     try:
         headers = {
             "User-Agent": random.choice([
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0",
-                "Mozilla/5.0 (X11; Linux x86_64) Chrome/118.0"
+                "suru/1.0 (suru.ingr.in SfR 7878; SmRCtC 1999) Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0",
+                "suru/1.0 (suru.ingr.in SfR 7878; SmRCtC 1999) Mozilla/5.0 (X11; Linux x86_64) Chrome/118.0"
             ]),
             "Accept": "text/html",
         }
@@ -133,9 +133,9 @@ def start_crawl():
     queue.join()
 
 # 🌐 API route
-@app.route("/")
-def home():
-    mode = request.args.get("req")
+@app.route("/bots")
+def bots():
+    mode = request.args.get("sr")
 
     if mode == "json":
         start_crawl()
@@ -148,5 +148,3 @@ def home():
     return "Crawler Running"
 
 # ▶️ Run server
-if __name__ == "__main__":
-    app.run(port=5000)
