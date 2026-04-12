@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 
-bots_api = Blueprint("bots_api", __name__)
+bots_api = Blueprint("bots", __name__)
 
 # start_crawl
 import requests
@@ -12,7 +12,6 @@ from stem import Signal
 from stem.control import Controller
 from queue import Queue
 from threading import Thread
-from flask import Flask, request, jsonify
 
 # 🔧 CONFIG
 BASE_DOMAIN = "ingr.in"
@@ -23,8 +22,6 @@ TOR_PROXY = "socks5h://127.0.0.1:9050"
 visited = set()
 queue = Queue()
 results = []
-
-app = Flask(__name__)
 
 # 🔁 Tor IP change
 def change_ip():
@@ -126,7 +123,11 @@ def worker():
 def start_crawl():
     visited.clear()
     results.clear()
-
+    
+    # Clear the queue
+    while not queue.empty():
+        queue.get()
+    
     queue.put("https://" + BASE_DOMAIN)
 
     threads = []
@@ -138,22 +139,6 @@ def start_crawl():
     queue.join()
 
 # 🌐 API route
-@app.route("/bots")
-def bots():
-    mode = request.args.get("sr")
-
-    if mode == "json":
-        start_crawl()
-        return jsonify({
-            "status": "success",
-            "total": len(results),
-            "data": results
-        })
-
-    return "Crawler Running"
-
-# ▶️ Run server
-
 @bots_api.route("/bots")
 def run_bots():
     mode = request.args.get("sr")
