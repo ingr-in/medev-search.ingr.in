@@ -139,7 +139,7 @@ def start_crawl():
     queue.join()
 
 # 🌐 API route
-@bots_api.route("/bots")
+@bots.route("/bots")
 def run_bots():
     mode = request.args.get("sr")
 
