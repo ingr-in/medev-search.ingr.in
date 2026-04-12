@@ -116,7 +116,9 @@ def get_sitemap_urls():
 
     possible = [
         f"https://{BASE_DOMAIN}/sitemap.xml",
-        f"https://{BASE_DOMAIN}/sitemap_index.xml"
+        f"https://sitemaps.{BASE_DOMAIN}",
+        f"https://sitemaps.{BASE_DOMAIN}/?sr=xml ",
+        f"https://{BASE_DOMAIN}/sitemap.php?sr=xml"
     ]
 
     for sm in possible:
