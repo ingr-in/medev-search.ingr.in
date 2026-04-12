@@ -19,5 +19,5 @@ def about():
     return render_template('about.html')
 
 @main.route('/bots')
-def about();
+def bots();
     return render_template('bots.py')
