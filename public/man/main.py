@@ -17,7 +17,3 @@ def home():
 @main.route('/about')
 def about():
     return render_template('about.html')
-
-@main.route('/bots')
-def bots();
-    return render_template('bots.py')
