@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 
-bots_api = Blueprint("bots", __name__)
+bots = Blueprint("bots", __name__)
 
 # start_crawl
 import requests
