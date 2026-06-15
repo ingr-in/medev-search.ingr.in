@@ -1,8 +1,8 @@
 import os
 from flask import Flask
-from man.main import main
-from man.api import api
-from man.bots import bots
+from spy.man.main import main
+from spy.man.api import api
+from spy.man.bots import bots
 
 app = Flask(__name__)
 
