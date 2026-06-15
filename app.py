@@ -15,7 +15,7 @@ app = Flask(
 app.register_blueprint(main)
 app.register_blueprint(api, url_prefix="/api")
 app.register_blueprint(bots, url_prefix="/bots")
-app.register_blueprint(health, url_prefix="/health")
+app.register_blueprint(health)
 
 @app.route("/")
 def home():
