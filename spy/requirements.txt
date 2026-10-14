@@ -11,3 +11,5 @@ beautifulsoup4
 tldextract
 schedule
 stem
+pymongo
+dnspython
