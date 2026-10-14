@@ -1,45 +1,26 @@
-import os
-
-from flask import Blueprint, jsonify, request
-from pymongo import MongoClient, ReturnDocument
-from pymongo.errors import PyMongoError, ConfigurationError
-
+from flask import Flask, jsonify
+from pymongo import MongoClient
+import 
 db = Blueprint("db", __name__)
 
-# MongoDB Atlas connection
-MONGO_URI = os.environ.get("mongodb+srv://if0_38703354:ZYqQXt7j8kU3BXq6@cluster0.wih1ej0.mongodb.net/")
+app = Flask(__name__)
+mongo_uri = "mongodb+srv://if0_38703354:<db_password>@cluster0.wih1ej0.mongodb.net/"
+client = MongoClient(mongo_uri)
 
-client = None
-database = None
-recipes = None
+@app.route("/ping-db")
+def ping_db():
+    try:
+        client.admin.command("ping")
+        return jsonify({"ok": True, "message": "MongoDB is reachable"})
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
 
+@app.route("/db")
+def index():
+    return "Flask + MongoDB is running. Try GET /ping-db"
 
-def connect_mongodb():
-    global client, database, recipes
-
-    if not MONGO_URI:
-        raise RuntimeError("MONGO_URI environment variable is missing")
-
-    if client is None:
-        client = MongoClient(
-            MONGO_URI,
-            serverSelectionTimeoutMS=5000
-        )
-
-    client.admin.command("ping")
-
-    database = client["myDatabase"]
-    recipes = database["recipes"]
-
-
-def database_error(error):
-    return jsonify({
-        "success": False,
-        "error": error
-    }), 500
-
-
-# --------------------------------------------------
+if __name__ == "__main__":
+    app.run() --------------------------------------------------
 # DATABASE STATUS
 # URL: /db
 # --------------------------------------------------
