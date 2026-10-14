@@ -7,7 +7,7 @@ from pymongo.errors import PyMongoError, ConfigurationError
 db = Blueprint("db", __name__)
 
 # MongoDB Atlas connection
-MONGO_URI = os.environ.get("MONGO_URI")
+MONGO_URI = os.environ.get("mongodb+srv://if0_38703354:ZYqQXt7j8kU3BXq6@cluster0.wih1ej0.mongodb.net/")
 
 client = None
 database = None
