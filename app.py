@@ -4,6 +4,7 @@ from spy.man.health import health
 from spy.man.main import main
 from spy.man.api import api
 from spy.man.bots import bots
+from spy.man.db import db
 
 app = Flask(
     __name__,
