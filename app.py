@@ -15,6 +15,7 @@ app = Flask(
 app.register_blueprint(main)
 app.register_blueprint(api, url_prefix="/api")
 app.register_blueprint(bots, url_prefix="/bots")
+app.register_blueprint(db, url_prefix="/db")
 app.register_blueprint(health)
 
 @app.route("/")
