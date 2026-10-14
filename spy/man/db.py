@@ -2,6 +2,9 @@ from flask import Blueprint, render_template
 import pymongo
 import sys
 db = Blueprint("db", __name__)
+@db.route("/db")
+def db():
+    return {
 # Replace the placeholder data with your Atlas connection string. Be sure it includes
 # a valid username and password! Note that in a production environment,
 # you should not store your password in plain-text here.
@@ -114,3 +117,4 @@ print("\n")
 my_result = my_collection.delete_many({ "$or": [{ "name": "elotes" }, { "name": "fried rice" }]})
 print("I deleted %x records." %(my_result.deleted_count))
 print("\n")
+}
