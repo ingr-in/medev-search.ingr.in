@@ -4,7 +4,7 @@ import
 db = Blueprint("db", __name__)
 
 app = Flask(__name__)
-mongo_uri = "mongodb+srv://if0_38703354:<db_password>@cluster0.wih1ej0.mongodb.net/"
+mongo_uri = "mongodb+srv://if0_38703354:ZYqQXt7j8kU3BXq6@cluster0.wih1ej0.mongodb.net/"
 client = MongoClient(mongo_uri)
 
 @app.route("/ping-db")
