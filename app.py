@@ -6,6 +6,7 @@ from spy.man.api import api
 from spy.man.bots import bots
 from spy.man.db import db
 
+
 app = Flask(
     __name__,
     template_folder="spy/templates",
