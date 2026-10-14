@@ -1,14 +1,49 @@
 import os
-
 from flask import Blueprint, jsonify, request
 from pymongo import MongoClient, ReturnDocument
 from pymongo.errors import PyMongoError, ConfigurationError
+from urllib.parse import quote_plus
 
-# Blueprint
+# --------------------------------------------------
+# BLUEPRINT
+# --------------------------------------------------
+
 db = Blueprint("db", __name__)
 
-# MongoDB Atlas configuration
-MONGO_URI = os.environ.get("mongodb+srv://if0_38703354:ZYqQXt7j8kU3BXq6@cluster0.wih1ej0.mongodb.net/")
+# --------------------------------------------------
+# MONGODB ATLAS CONFIGURATION
+# --------------------------------------------------
+# Option 1: Environment variable MONGO_URI
+# Option 2: Demo username/password below
+#
+# Replace demo credentials with your own credentials.
+# Never publish real credentials in a public repository.
+# --------------------------------------------------
+
+MONGO_USERNAME = "YOUR_MONGODB_USERNAME"
+MONGO_PASSWORD = "YOUR_MONGODB_PASSWORD"
+
+MONGO_HOST = "cluster0.example.mongodb.net"
+MONGO_DATABASE = "myDatabase"
+
+# Encode username/password to handle special characters.
+username = quote_plus(MONGO_USERNAME)
+password = quote_plus(MONGO_PASSWORD)
+
+DEMO_URI = (
+    f"mongodb+srv://{username}:{password}"
+    f"@{MONGO_HOST}/?retryWrites=true&w=majority"
+)
+
+# Prefer MONGO_URI from Render Environment if configured.
+MONGO_URI = os.environ.get("MONGO_URI") or DEMO_URI
+
+# Do not connect when placeholder credentials are still present.
+DEMO_CREDENTIALS = (
+    MONGO_USERNAME == "if0_38703354"
+    or MONGO_PASSWORD == "ZYqQXt7j8kU3BXq6"
+    or MONGO_HOST == "cluster0.wih1ej0.mongodb.net"
+)
 
 client = None
 database = None
@@ -22,19 +57,25 @@ recipes = None
 def connect_mongodb():
     global client, database, recipes
 
+    if DEMO_CREDENTIALS and not os.environ.get("MONGO_URI"):
+        raise RuntimeError(
+            "Configure MONGO_URI or replace demo MongoDB credentials"
+        )
+
     if not MONGO_URI:
-        raise RuntimeError("MONGO_URI environment variable is missing")
+        raise RuntimeError("MongoDB URI is missing")
 
     if client is None:
         client = MongoClient(
             MONGO_URI,
-            serverSelectionTimeoutMS=5000
+            serverSelectionTimeoutMS=5000,
+            connectTimeoutMS=5000
         )
 
-    # Verify database connectivity
+    # Verify connectivity.
     client.admin.command("ping")
 
-    database = client["myDatabase"]
+    database = client[MONGO_DATABASE]
     recipes = database["recipes"]
 
 
@@ -47,6 +88,17 @@ def database_error(message, status=500):
         "success": False,
         "error": message
     }), status
+
+
+def handle_db_error(exc):
+    if isinstance(exc, RuntimeError):
+        return database_error(str(exc), 503)
+
+    if isinstance(exc, (ConfigurationError, PyMongoError)):
+        # Keep credentials and internal connection details private.
+        return database_error("MongoDB operation failed", 503)
+
+    return database_error("Internal server error", 500)
 
 
 # --------------------------------------------------
@@ -65,28 +117,13 @@ def database_home():
             "success": True,
             "message": "MongoDB connection successful",
             "status": "running",
-            "database": "myDatabase",
+            "database": MONGO_DATABASE,
             "collection": "recipes",
             "version": "1.0.0"
         })
 
-    except RuntimeError:
-        return database_error(
-            "MONGO_URI environment variable is missing",
-            503
-        )
-
-    except ConfigurationError:
-        return database_error(
-            "Invalid MongoDB connection configuration",
-            503
-        )
-
-    except PyMongoError:
-        return database_error(
-            "MongoDB connection failed",
-            503
-        )
+    except (RuntimeError, ConfigurationError, PyMongoError) as exc:
+        return handle_db_error(exc)
 
 
 # --------------------------------------------------
@@ -105,17 +142,8 @@ def ping_db():
             "message": "MongoDB is reachable"
         })
 
-    except RuntimeError:
-        return database_error(
-            "MONGO_URI environment variable is missing",
-            503
-        )
-
-    except (ConfigurationError, PyMongoError):
-        return database_error(
-            "MongoDB is not reachable",
-            503
-        )
+    except (RuntimeError, ConfigurationError, PyMongoError) as exc:
+        return handle_db_error(exc)
 
 
 # --------------------------------------------------
@@ -138,11 +166,8 @@ def get_recipes():
             "data": documents
         })
 
-    except RuntimeError:
-        return database_error("MongoDB configuration is missing", 503)
-
-    except (ConfigurationError, PyMongoError):
-        return database_error("Unable to read recipes")
+    except (RuntimeError, ConfigurationError, PyMongoError) as exc:
+        return handle_db_error(exc)
 
 
 # --------------------------------------------------
@@ -168,11 +193,8 @@ def get_recipe(name):
             "data": document
         })
 
-    except RuntimeError:
-        return database_error("MongoDB configuration is missing", 503)
-
-    except (ConfigurationError, PyMongoError):
-        return database_error("Unable to find recipe")
+    except (RuntimeError, ConfigurationError, PyMongoError) as exc:
+        return handle_db_error(exc)
 
 
 # --------------------------------------------------
@@ -191,14 +213,20 @@ def insert_recipe():
     data = request.get_json(silent=True)
 
     if not isinstance(data, dict):
-        return database_error("A valid JSON object is required", 400)
+        return database_error(
+            "A valid JSON object is required",
+            400
+        )
 
     name = data.get("name")
     ingredients = data.get("ingredients")
     prep_time = data.get("prep_time")
 
     if not isinstance(name, str) or not name.strip():
-        return database_error("A valid recipe name is required", 400)
+        return database_error(
+            "A valid recipe name is required",
+            400
+        )
 
     if (
         not isinstance(ingredients, list)
@@ -228,6 +256,13 @@ def insert_recipe():
     try:
         connect_mongodb()
 
+        # Prevent duplicate recipe names.
+        if recipes.find_one({"name": document["name"]}):
+            return database_error(
+                "A recipe with this name already exists",
+                409
+            )
+
         result = recipes.insert_one(document)
 
         return jsonify({
@@ -236,11 +271,8 @@ def insert_recipe():
             "inserted_id": str(result.inserted_id)
         }), 201
 
-    except RuntimeError:
-        return database_error("MongoDB configuration is missing", 503)
-
-    except (ConfigurationError, PyMongoError):
-        return database_error("Unable to insert recipe")
+    except (RuntimeError, ConfigurationError, PyMongoError) as exc:
+        return handle_db_error(exc)
 
 
 # --------------------------------------------------
@@ -259,7 +291,10 @@ def update_recipe(name):
     data = request.get_json(silent=True)
 
     if not isinstance(data, dict):
-        return database_error("A valid JSON object is required", 400)
+        return database_error(
+            "A valid JSON object is required",
+            400
+        )
 
     allowed_fields = {"ingredients", "prep_time"}
 
@@ -313,11 +348,8 @@ def update_recipe(name):
             "data": document
         })
 
-    except RuntimeError:
-        return database_error("MongoDB configuration is missing", 503)
-
-    except (ConfigurationError, PyMongoError):
-        return database_error("Unable to update recipe")
+    except (RuntimeError, ConfigurationError, PyMongoError) as exc:
+        return handle_db_error(exc)
 
 
 # --------------------------------------------------
@@ -326,3 +358,20 @@ def update_recipe(name):
 # --------------------------------------------------
 
 @db.route("/recipes/<string:name>", methods=["DELETE"])
+def delete_recipe(name):
+    try:
+        connect_mongodb()
+
+        result = recipes.delete_one({"name": name})
+
+        if result.deleted_count == 0:
+            return database_error("Recipe not found", 404)
+
+        return jsonify({
+            "success": True,
+            "message": "Recipe deleted successfully",
+            "deleted_count": result.deleted_count
+        })
+
+    except (RuntimeError, ConfigurationError, PyMongoError) as exc:
+        return handle_db_error(exc)
