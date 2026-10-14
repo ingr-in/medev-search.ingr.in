@@ -326,4 +326,3 @@ def update_recipe(name):
 # --------------------------------------------------
 
 @db.route("/recipes/<string:name>", methods=["DELETE"])
-def
