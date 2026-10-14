@@ -21,3 +21,7 @@ def about():
 @main.route('/bots')
 def bots_page():
     return render_template('bots.html')
+
+@main.route('/db')
+def about():
+    return render_template('db.html')
